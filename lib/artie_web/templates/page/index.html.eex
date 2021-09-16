@@ -1,8 +1,1 @@
-<main id="interface">
-    <header id="header">
-        <h1>Welcome</h1>
-        <button class="join" id="call-button" type="button">
-            Join Call
-        </button>
-  </header>
-</main>
+<div id="app"></div>

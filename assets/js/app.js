@@ -14,4 +14,7 @@ import "../css/app.css"
 //
 import "phoenix_html"
 
-import "main"
+import App from "../src/App"
+import { render } from "solid-js/web"
+
+render(App, document.getElementById("app"))
