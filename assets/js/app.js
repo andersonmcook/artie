@@ -15,6 +15,14 @@ import "../css/app.css"
 import "phoenix_html"
 
 import App from "../src/App"
+import { Provider } from "../src/store"
 import { render } from "solid-js/web"
 
-render(App, document.getElementById("app"))
+render(
+  () => (
+    <Provider>
+      <App />
+    </Provider>
+  ),
+  document.getElementById("app")
+)

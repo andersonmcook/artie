@@ -3,10 +3,17 @@ defmodule ArtieWeb.RoomChannel do
 
   @impl true
   def join("room:" <> _room_id, _payload, socket) do
-    broadcast!(socket, "connected", %{})
+    send(self(), :joined)
     {:ok, socket}
   end
 
+  @impl true
+  def handle_info(:joined, socket) do
+    broadcast!(socket, "connected", %{})
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_in("connected", _payload, socket) do
     {:noreply, socket}
   end
@@ -16,6 +23,7 @@ defmodule ArtieWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  @impl true
   def terminate({:shutdown, _}, socket) do
     broadcast!(socket, "disconnect", %{})
   end
