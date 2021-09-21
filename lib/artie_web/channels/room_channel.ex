@@ -23,6 +23,11 @@ defmodule ArtieWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_in("add", %{"x" => x, "y" => y}, socket) do
+    message = "You added #{x} and #{y} which equals #{x + y}"
+    {:reply, {:ok, %{"message" => message}}, socket}
+  end
+
   @impl true
   def terminate({:shutdown, _}, socket) do
     broadcast!(socket, "disconnect", %{})
