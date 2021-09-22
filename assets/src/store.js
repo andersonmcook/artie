@@ -12,13 +12,17 @@ const initialState = {
 
 export function Provider(props) {
   const [state, setState] = createStore(initialState)
-  const [connect, join, leave] = createWebSocket()
+  const [connect, join, leave, push, on] = createWebSocket()
 
   const actions = {
     joinRoom(room) {
       join({
         onError: console.error,
-        onOk: () => setState({ inCall: true, room }),
+        onOk: () => {
+          on("peer_left", console.log)
+          on("peer_joined", console.log)
+          setState({ inCall: true, room })
+        },
         topic: `room:${room}`,
       })
     },

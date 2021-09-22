@@ -1,5 +1,4 @@
 import { Socket } from "phoenix"
-import { createSignal } from "solid-js"
 
 // Placeholder function
 const f = () => {}
@@ -24,16 +23,17 @@ export const createWebSocket = () => {
     channel.join().receive("error", onError).receive("ok", onOk)
   }
 
-  const leave = ({ onError = f, onOk = f, timeout }) => {
+  const leave = ({ onError = f, onOk = f }) => {
     channel.leave().receive("error", onError).receive("ok", onOk)
   }
 
   const push = ({ message, onError = f, onOk = f, payload }) => {
-    channel
-      .push(message, payload, timeout)
-      .receive("error", onError)
-      .receive("ok", onOk)
+    channel.push(message, payload).receive("error", onError).receive("ok", onOk)
   }
 
-  return [connect, join, leave, push]
+  const on = (message, callback) => {
+    channel.on(message, callback)
+  }
+
+  return [connect, join, leave, push, on]
 }

@@ -9,7 +9,7 @@ export default () => {
     <main id="interface">
       <Header
         inCall={store.inCall}
-        joinRoom={() => actions.joinRoom("123")}
+        joinRoom={[actions.joinRoom, "123"]}
         leaveRoom={actions.leaveRoom}
         room={store.room}
       />
