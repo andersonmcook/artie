@@ -4,8 +4,10 @@ import { createSignal } from "solid-js"
 // Placeholder function
 const f = () => {}
 
+// Consider adding/handling timeout
+
 // Probably want to handle multiple channels
-export const usePhoenix = () => {
+export const createWebSocket = () => {
   const socket = new Socket("/socket", { params: { token: window.userToken } })
   let channel
 
@@ -22,20 +24,16 @@ export const usePhoenix = () => {
     channel.join().receive("error", onError).receive("ok", onOk)
   }
 
-  const push = ({
-    message,
-    onError = f,
-    onOk = f,
-    onTimeout = f,
-    payload,
-    timeout,
-  }) => {
+  const leave = ({ onError = f, onOk = f, timeout }) => {
+    channel.leave().receive("error", onError).receive("ok", onOk)
+  }
+
+  const push = ({ message, onError = f, onOk = f, payload }) => {
     channel
       .push(message, payload, timeout)
       .receive("error", onError)
       .receive("ok", onOk)
-      .receive("timeout", onTimeout)
   }
 
-  return [connect, join, push]
+  return [connect, join, leave, push]
 }
