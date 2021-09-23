@@ -6,7 +6,7 @@ export default (props) => (
       muted
       playsinline
       poster="/images/placeholder.png"
-      prop:srcObject={props.stream}
+      prop:srcObject={props.self.stream}
     ></video>
     <video
       id="peer"

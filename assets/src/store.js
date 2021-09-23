@@ -8,6 +8,9 @@ const StoreContext = createContext()
 const initialState = {
   inCall: false,
   room: null,
+  self: {
+    stream: null,
+  },
 }
 
 export function Provider(props) {
@@ -36,7 +39,17 @@ export function Provider(props) {
   }
   const store = [state, actions]
 
-  onMount(connect)
+  onMount(() => {
+    connect()
+    const stream = new MediaStream()
+    navigator.mediaDevices
+      .getUserMedia({ audio: false, video: true })
+      .then((media) => {
+        stream.addTrack(media.getTracks()[0])
+
+        setState("self", "stream", stream)
+      })
+  })
 
   return (
     <StoreContext.Provider value={store}>
