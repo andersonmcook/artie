@@ -21,6 +21,7 @@ export function Provider(props) {
         onOk: () => {
           on("peer_left", console.log)
           on("peer_joined", console.log)
+          on("signal", console.log)
           setState({ inCall: true, room })
         },
         topic: `room:${room}`,

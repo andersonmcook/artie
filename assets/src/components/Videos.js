@@ -1,4 +1,4 @@
-export default () => (
+export default (props) => (
   <article id="videos">
     <video
       id="self"
@@ -6,6 +6,7 @@ export default () => (
       muted
       playsinline
       poster="/images/placeholder.png"
+      prop:srcObject={props.stream}
     ></video>
     <video
       id="peer"

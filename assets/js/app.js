@@ -18,11 +18,35 @@ import App from "../src/App"
 import { Provider } from "../src/store"
 import { render } from "solid-js/web"
 
-render(
-  () => (
-    <Provider>
-      <App />
-    </Provider>
-  ),
-  document.getElementById("app")
-)
+// Truly cursed
+var STREAM = new MediaStream()
+function createTrack() {
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: false,
+      video: true,
+    })
+    .then(function (media) {
+      STREAM.addTrack(media.getTracks()[0])
+
+      return render(
+        () => (
+          <Provider>
+            <App stream={STREAM} />
+          </Provider>
+        ),
+        document.getElementById("app")
+      )
+    })
+}
+
+createTrack()
+
+// render(
+//   () => (
+//     <Provider>
+//       <App stream={STREAM} />
+//     </Provider>
+//   ),
+//   document.getElementById("app")
+// )

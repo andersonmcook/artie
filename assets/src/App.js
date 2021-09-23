@@ -2,7 +2,7 @@ import { useStore } from "./store"
 import Header from "./components/Header"
 import Videos from "./components/Videos"
 
-export default () => {
+export default (props) => {
   const [store, actions] = useStore()
 
   return (
@@ -13,7 +13,7 @@ export default () => {
         leaveRoom={actions.leaveRoom}
         room={store.room}
       />
-      <Videos />
+      <Videos stream={props.stream} />
     </main>
   )
 }
