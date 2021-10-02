@@ -13,6 +13,7 @@ export default (props) => (
       autoplay
       playsinline
       poster="/images/placeholder.png"
+      props:srcObject={props.peer.stream}
     ></video>
   </article>
 )
