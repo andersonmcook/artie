@@ -1,5 +1,6 @@
 import { createContext, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
+import { configureCallbacks } from "./connection"
 import { createWebSocket } from "./socket"
 
 const StoreContext = createContext()
@@ -35,37 +36,11 @@ export function Provider(props) {
       join({
         onError: console.error,
         onOk: () => {
-          on("peer_left", console.log)
+          on("peer_left", () => console.log("peer_left"))
           on("peer_joined", () => setState("self", "isPolite", true))
           on("signal", console.log)
           setState({ inCall: true, room })
-          setState("peer", "connection", (connection) => {
-            connection.onnegotiationneeded = () => {
-              setState("self", "isMakingOffer", true)
-              console.log("Attempting to make an offer...")
-              connection.setLocalDescription().then(() => {
-                push({
-                  message: "signal",
-                  payload: { description: connection.localDescription },
-                })
-                // Could tie this to `onOk`
-                setState("self", "isMakingOffer", false)
-              })
-            }
-
-            connection.onicecandidate = ({ candidate }) => {
-              console.log("Attempting to handle an ICE candidate...")
-              push({ message: "signal", payload: { candidate } })
-            }
-
-            // Example also includes `track` in callback
-            connection.ontrack = ({ streams: [stream] }) => {
-              console.log("Attempting to add media for peer...")
-              setState({ peer: { stream } })
-            }
-
-            return connection
-          })
+          setState("peer", "connection", configureCallbacks({ push, setState }))
         },
         topic: `room:${room}`,
       })
@@ -73,6 +48,7 @@ export function Provider(props) {
     leaveRoom() {
       leave({
         onError: console.error,
+        // Could reset more
         onOk: () => setState({ inCall: false, room: null }),
       })
     },
